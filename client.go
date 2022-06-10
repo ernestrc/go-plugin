@@ -613,7 +613,7 @@ func (c *Client) Start() (addr net.Addr, err error) {
 		cmd = exec.Command("")
 	}
 	if !c.config.SkipHostEnv {
-		cmd.Env = append(cmd.Env, os.Environ()...)
+		cmd.Env = append(os.Environ(), cmd.Env...)
 	}
 	cmd.Env = append(cmd.Env, env...)
 	cmd.Stdin = os.Stdin
