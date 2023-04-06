@@ -463,6 +463,12 @@ func (c *Client) killed() bool {
 //
 // This method can safely be called multiple times.
 func (c *Client) Kill() {
+	c.KillSignal(os.Kill)
+}
+
+// KillSignal sends the given kill signal to the process.
+// See Kill for more info.
+func (c *Client) KillSignal(signal os.Signal) {
 	// Grab a lock to read some private fields.
 	c.l.Lock()
 	runner := c.runner
@@ -529,7 +535,7 @@ func (c *Client) Kill() {
 
 	// If graceful exiting failed, just kill it
 	c.logger.Warn("plugin failed to exit gracefully")
-	if err := runner.Kill(context.Background()); err != nil {
+	if err := runner.Kill(context.Background(), signal); err != nil {
 		c.logger.Debug("error killing plugin", "error", err)
 	}
 
@@ -702,7 +708,7 @@ func (c *Client) Start() (addr net.Addr, err error) {
 		rErr := recover()
 
 		if err != nil || rErr != nil {
-			runner.Kill(context.Background())
+			runner.Kill(context.Background(), os.Kill)
 		}
 
 		if rErr != nil {

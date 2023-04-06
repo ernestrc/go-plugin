@@ -6,6 +6,7 @@ package runner
 import (
 	"context"
 	"io"
+	"os"
 )
 
 // Runner defines the interface required by go-plugin to manage the lifecycle of
@@ -45,7 +46,7 @@ type AttachedRunner interface {
 	Wait(ctx context.Context) error
 
 	// Kill should stop the plugin and perform any cleanup required.
-	Kill(ctx context.Context) error
+	Kill(context.Context, os.Signal) error
 
 	// ID is a unique identifier to represent the running plugin. e.g. pid or
 	// container ID.

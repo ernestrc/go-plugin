@@ -54,8 +54,8 @@ func (c *CmdAttachedRunner) Wait(_ context.Context) error {
 	return pidWait(c.pid)
 }
 
-func (c *CmdAttachedRunner) Kill(_ context.Context) error {
-	return c.process.Kill()
+func (c *CmdAttachedRunner) Kill(_ context.Context, s os.Signal) error {
+	return c.process.Signal(s)
 }
 
 func (c *CmdAttachedRunner) ID() string {

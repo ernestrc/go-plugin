@@ -85,9 +85,9 @@ func (c *CmdRunner) Wait(_ context.Context) error {
 	return c.cmd.Wait()
 }
 
-func (c *CmdRunner) Kill(_ context.Context) error {
+func (c *CmdRunner) Kill(_ context.Context, s os.Signal) error {
 	if c.cmd.Process != nil {
-		err := c.cmd.Process.Kill()
+		err := c.cmd.Process.Signal(s)
 		// Swallow ErrProcessDone, we support calling Kill multiple times.
 		if !errors.Is(err, os.ErrProcessDone) {
 			return err
