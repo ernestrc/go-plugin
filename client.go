@@ -405,6 +405,12 @@ func (c *Client) killed() bool {
 //
 // This method can safely be called multiple times.
 func (c *Client) Kill() {
+	c.KillSignal(os.Kill)
+}
+
+// KillSignal sends the given kill signal to the process.
+// See Kill for more info.
+func (c *Client) KillSignal(signal os.Signal) {
 	// Grab a lock to read some private fields.
 	c.l.Lock()
 	process := c.process
@@ -466,7 +472,7 @@ func (c *Client) Kill() {
 
 	// If graceful exiting failed, just kill it
 	c.logger.Warn("plugin failed to exit gracefully")
-	process.Kill()
+	process.Signal(signal)
 
 	c.l.Lock()
 	c.processKilled = true
