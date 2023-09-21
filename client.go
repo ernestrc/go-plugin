@@ -1138,7 +1138,7 @@ func (c *Client) logStderr(name string, r io.Reader) {
 			case strings.HasPrefix(line, "[ERROR]"):
 				l.Error(line)
 			default:
-				l.Debug(line)
+				l.Info(line)
 			}
 		} else {
 			out := flattenKVPairs(entry.KVPairs)
@@ -1159,7 +1159,7 @@ func (c *Client) logStderr(name string, r io.Reader) {
 				// if there was no log level, it's likely this is unexpected
 				// json from something other than hclog, and we should output
 				// it verbatim.
-				l.Debug(string(line))
+				l.Info(string(line))
 			}
 		}
 	}
